@@ -1,5 +1,12 @@
 # My Implementation Notes
 
+## Network issues
+
+worked fine on the 2013. Things are not working well on the 2011. 
+
+It's a 64 bit machine, but the network is not working well. PIHole is "down" per prometheus. speedtest is unhealthy per docker ps. I can get metrics form both, and can load the pihole admin. Smells like some
+docker networking issue. Cant place it yet.
+
 
 ## Getting docker compose module to work
 
@@ -37,12 +44,10 @@ Im not sure if its a bug in the module or a configuration issue on my end.
 
 ## PI Hole
 
-PIHole setup failed because I had dnsmasq running on the host and because a network was not being utilized correctly. had to add external=true to the network config in the pi hole docker compose file.
+PIHole setup failed because I had dnsmasq running on the host and because a network was not being utilized correctly. had to add external=true to the network config in the pi hole docker compose file. Also, systemd-resolved was running on the host and was causing issues.
 
-```
-sudo systemctl disable systemd-resolved.service
-sudo systemctl stop systemd-resolved.service
-```
+/etc/systemd/resolved.conf
+DNSStubListener=no
 
 `sudo apt-get remove dnsmasq-base` and a reboot to remove dnsmasq from the host.
 
