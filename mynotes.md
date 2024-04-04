@@ -22,7 +22,6 @@ Usage:  docker version [OPTIONS]
 Show the Docker version information
 ```
 
-Works fine when DOCKER_HOST is set on the host. 
 
 check /Users/roylindauer/.ansible/collections/ansible_collections/community/docker/plugins/module_utils/common_cli.py
 
@@ -31,10 +30,19 @@ check /Users/roylindauer/.ansible/collections/ansible_collections/community/dock
 dummy, self._version, dummy = self.call_cli_json('version', '--format', '{{ json . }}', check_rc=True)
 ```
 
+I had to manually edit the module to remove the `--format '{{ json . }}'` from the command to get it to work. 
+
+Im not sure if its a bug in the module or a configuration issue on my end.
+
 
 ## PI Hole
 
 PIHole setup failed because I had dnsmasq running on the host and because a network was not being utilized correctly. had to add external=true to the network config in the pi hole docker compose file.
+
+```
+sudo systemctl disable systemd-resolved.service
+sudo systemctl stop systemd-resolved.service
+```
 
 `sudo apt-get remove dnsmasq-base` and a reboot to remove dnsmasq from the host.
 
