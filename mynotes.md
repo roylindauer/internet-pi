@@ -1,22 +1,20 @@
 # My Implementation Notes
 
-## Network issues
+This is all running on a 2011 Macbook Pro running Ubuntu 22.04. 
 
-worked fine on the 2013. Things are not working well on the 2011. 
+All of this configuration could be done with an ansible playbook. 
 
-It's a 64 bit machine, but the network is not working well. PIHole is "down" per prometheus. speedtest is unhealthy per docker ps. I can get metrics form both, and can load the pihole admin. Smells like some
-docker networking issue. Cant place it yet.
-
+This is a list of things I had to do to get this working.
 
 ## Getting docker compose module to work
 
-I had to set `DOCKER_HOST` env var on the host. 
+I had to set `DOCKER_HOST` env var on the host. This env var was not set by default for some reason.
 
-**Potential Bug in docker compose module**
+**Potential Bug in docker compose v2 module**
 
-Using the default unix socket was failing to connect, and when it did connect, it just hangs due to it not correctly dealing with an invalid command. 
+Using the default unix socket failed to connect, and when it did connect, it just hangs due to it not correctly dealing with an invalid command. 
 
-The docker compose module tries to get the docker version, and it does this by running `unix:///var/run/docker.sock version --format '{{ json . }}'` which is not supported on newer versions of docker. 
+The docker compose module tries to get the docker version, and it does this by running `/usr/bin/docker --host unix:///var/run/docker.sock version --format '{{ json . }}'` which is not supported on newer versions of docker. 
 
 The issue is the command returned:
 
@@ -29,6 +27,7 @@ Usage:  docker version [OPTIONS]
 Show the Docker version information
 ```
 
+And the module just hangs and does not return.
 
 check /Users/roylindauer/.ansible/collections/ansible_collections/community/docker/plugins/module_utils/common_cli.py
 
