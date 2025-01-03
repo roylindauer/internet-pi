@@ -50,3 +50,11 @@ DNSStubListener=no
 
 `sudo apt-get remove dnsmasq-base` and a reboot to remove dnsmasq from the host.
 
+
+
+--
+
+
+grafana
+prometheus
+pihole
